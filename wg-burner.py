@@ -1,10 +1,5 @@
 #!/usr/bin/python3
 
-#NOTES FOR FUTURE:
-# - Make a droplet object that can be passed to methods in here...
-# - Fix issue where generate-wg-configs.sh has ufsit.ddns.net set by default
-# - Make parameters to be passed to generate-wg-configs.sh
-
 from Droplet import Droplet
 
 import json
@@ -19,6 +14,7 @@ from random import randint
 api_url_base = 'https://api.digitalocean.com/v2/'
 
 ## Methods ##
+
 def add_ssh_key(token, name, pubkey):
   curr_url = '{0}account/keys'.format(api_url_base)
 
@@ -47,13 +43,10 @@ def del_ssh_key(token, fingerprint):
   requests.delete(curr_url, headers=headers)
 
 def init_wg(droplet):
-  print("DEBUG: Installing Wireguard...") #DEBUG
-  droplet.run('apt update && add-apt-repository ppa:wireguard/wireguard && apt install -y wireguard git python')
+  droplet.run('apt update && add-apt-repository ppa:wireguard/wireguard && apt install -y wireguard git python qrencode')
 
-  print("DEBUG: Getting config starter script...") #DEBUG
   droplet.run('git clone https://github.com/decaby7e/wireguard-management')
 
-  print("DEBUG: Generating Wireguard configs...") #DEBUG
   droplet.run('wireguard-management/generate-wg-configs.sh -i {0}; cp configs/server/wg0.conf /etc/wireguard/'.format(droplet.ip))
 
   # INSECURE: Exposes client and server private keys
@@ -64,14 +57,11 @@ def init_wg(droplet):
   # cmd = 'python -m SimpleHTTPServer {0}'.format(listen_port)
   # droplet.run(cmd)
 
-  print("DEBUG: Displaying client configuration...") #DEBUG
-  droplet.run('cat configs/client-2/wg2.conf')
-  input('Press enter when done.')
+  droplet.run('qrencode -t ansiutf8 < configs/client-2/wg2.conf')
+  input('> Press enter when done.')
 
-  print("DEBUG: Enabling ipv4 forwarding...") #DEBUG
   droplet.run('sysctl -w net.ipv4.ip_forward=1')
 
-  print("DEBUG: Starting Wireguard server...") #DEBUG
   droplet.run('wg-quick up wg0')
 
 ## Main ##
