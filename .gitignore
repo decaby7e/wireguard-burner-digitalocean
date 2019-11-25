@@ -1,0 +1,8 @@
+#Credentials
+secrets.json
+privkey
+pubkey
+
+#Temporary files / testing files
+tester.py
+__pycache__/
