@@ -14,20 +14,13 @@ To run this script, please follow these steps:
 
 2. Create a secrets.json file in the script directory and fill out your appropriate information.
 
-   2a. The script currently depends on SSH public and private key *files* in the script directory.
-       To create these: `ssh-keygen -t rsa -b 4096 -C "temp-ssh-key" -f privkey`
+   2a. To create a Digital Ocean API key, [please see this tutorial](https://www.digitalocean.com/docs/api/create-personal-access-token/).
 
-   2b. Generate your SSH fingerpint: `ssh-keygen -l -E md5 -f privkey.pub`
-
-   2c. To create a Digital Ocean API key, [please see this tutorial](https://www.digitalocean.com/docs/api/create-personal-access-token/).
-
-3. Run the script! `./wg-burner`
+3. Run the script! `./run.sh`
 
 ## Future improvements
 
 - Add parameters to wg-burner.py to specify number of clients, time to keep server up, etc.
-
-- Steps 2a - 2b will be automated in the future with an additional script.
 
 - In the future, it is possible that I will move the Droplet object to its own repository with some additonal content.
 
