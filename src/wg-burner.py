@@ -100,22 +100,19 @@ def gen_fingerprint(ssh_pubkey):
 
   return newhex
 
-
 ## Main ##
 
 def main():
   global droplet
 
-  secrets = json.load(open('secrets.json', 'r'))
+  secrets = json.load(open('auth/secrets.json', 'r'))
   token = secrets['user_token']
-  keyfile = 'burnerkey'
+  keyfile = 'auth/burnerkey'
 
   gen_ssh_keys(keyfile)
 
   privkey = open(keyfile).read()
-
   ssh_pubkey = open('{0}.pub'.format(keyfile), 'r').read()
-
   fingerprint = gen_fingerprint(ssh_pubkey)
 
   droplet = Droplet(token, str(uuid.uuid1()), 'nyc3', keyfile, fingerprint)
@@ -141,7 +138,7 @@ def main():
   droplet.destroy()
   
   print("> Removing SSH key...")
-  del_ssh_key(token, secrets['ssh_fingerprint'])
+  del_ssh_key(token, fingerprint)
 
 if __name__ == '__main__':
   try:
