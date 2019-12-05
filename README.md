@@ -6,8 +6,6 @@ Create a Wireguard VPN for one-time use and destroy it once finished.
 This project is split into two seperate components: the Droplet object and the management script that handles creating, destroying, and configuring the VPN.
 For a full project description, [please read this blog post](https://blog.ranvier.net/2019/11/wireguard-burner-vpn/).
 
-In the future, it is possible that I will move the Droplet object to its own repository.
-
 ## Setup
 
 To run this script, please follow these steps:
@@ -30,3 +28,6 @@ To run this script, please follow these steps:
 - Add parameters to wg-burner.py to specify number of clients, time to keep server up, etc.
 
 - Steps 2a - 2b will be automated in the future with an additional script.
+
+- In the future, it is possible that I will move the Droplet object to its own repository with some additonal content.
+
