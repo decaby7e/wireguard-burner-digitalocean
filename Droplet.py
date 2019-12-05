@@ -6,7 +6,7 @@ import os
 import time
 
 class Droplet:
-    def __init__(self, token, name, region, ssh_key_fingerprint):
+    def __init__(self, token, name, region, ssh_privkey_file, ssh_key_fingerprint):
         self.api_url_base = 'https://api.digitalocean.com/v2/'
         self.status = 'destroyed'
         
@@ -14,7 +14,7 @@ class Droplet:
         self.name = name
         self.region = region
 
-        self.privkey = 'privkey'
+        self.privkey = ssh_privkey_file
         self.ssh_key_fingerprint = ssh_key_fingerprint
         
         self.headers = {

@@ -2,6 +2,10 @@
 secrets.json
 privkey
 pubkey
+burnerkey
+burnerkey.pub
+*.priv
+*.pub
 
 #Temporary files / testing files
 tester.py

@@ -7,11 +7,16 @@ import requests
 
 import uuid
 
+import hashlib
+import base64
+from Crypto.PublicKey import RSA
+
 import os
 import time
 from random import randint
 
 api_url_base = 'https://api.digitalocean.com/v2/'
+droplet = None
 
 ## Methods ##
 
@@ -64,17 +69,59 @@ def init_wg(droplet):
 
   droplet.run('wg-quick up wg0')
 
+def gen_ssh_keys(keyfile):
+  key = RSA.generate(2048)
+  f = open(keyfile, "wb")
+  f.write(key.exportKey('PEM'))
+  f.close()
+
+  pubkey = key.publickey()
+  f = open("{0}.pub".format(keyfile), "wb")
+  f.write(pubkey.exportKey('OpenSSH'))
+  f.close()
+
+  os.system('chmod 600 {0}'.format(keyfile))
+
+def gen_fingerprint(ssh_pubkey):
+  pubkey = ssh_pubkey.split()[1]
+  rawhex = hashlib.md5(base64.b64decode(pubkey.encode('utf-8'))).hexdigest()
+  newhex = ''
+  count = 0
+
+  for i in rawhex:
+    if(count == 2):
+      newhex += ':'
+      newhex += i
+      count = 0
+    else:
+      newhex += i
+    
+    count += 1
+
+  return newhex
+
+
 ## Main ##
 
 def main():
   global droplet
 
   secrets = json.load(open('secrets.json', 'r'))
-  token=secrets['user_token']
-  droplet = Droplet(token, str(uuid.uuid1()), 'nyc3', secrets['ssh_fingerprint'])
+  token = secrets['user_token']
+  keyfile = 'burnerkey'
+
+  gen_ssh_keys(keyfile)
+
+  privkey = open(keyfile).read()
+
+  ssh_pubkey = open('{0}.pub'.format(keyfile), 'r').read()
+
+  fingerprint = gen_fingerprint(ssh_pubkey)
+
+  droplet = Droplet(token, str(uuid.uuid1()), 'nyc3', keyfile, fingerprint)
 
   print("> Adding SSH key...")
-  add_ssh_key(token, droplet.name, secrets['ssh_pubkey'])
+  add_ssh_key(token, droplet.name, ssh_pubkey)
 
   print("> Creating Droplet...")
   droplet.create()
