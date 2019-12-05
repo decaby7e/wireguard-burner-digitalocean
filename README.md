@@ -24,3 +24,4 @@ To run this script, please follow these steps:
 
 - In the future, it is possible that I will move the Droplet object to its own repository with some additonal content.
 
+- Find a better way to wait for the droplet to come online. (Current implementation just bombards the server with SSH requests until it accepts one...)
