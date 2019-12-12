@@ -14,7 +14,7 @@ To run this script, please follow these steps:
 
 2. Create a secrets.json file in the script directory and fill out your appropriate information.
 
-   2a. To create a Digital Ocean API key, [please see this tutorial](https://www.digitalocean.com/docs/api/create-personal-access-token/).
+  1. To create a Digital Ocean API key, [please see this tutorial](https://www.digitalocean.com/docs/api/create-personal-access-token/).
 
 3. Run the script! `./run.sh`
 
