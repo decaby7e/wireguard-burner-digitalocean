@@ -3,6 +3,7 @@
 import json
 import requests
 import os
+import subprocess
 import time
 
 class Droplet:
@@ -91,7 +92,12 @@ class Droplet:
         if self.status == 'created':
             ssh_prefix='ssh -o StrictHostKeyChecking=no -i {0} root@{1}'.format(self.privkey, self.ip)
             cmd='{0} \' {1} \''.format(ssh_prefix, command_string)
-            return os.popen(cmd)
+            
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+            
+            (out, err) = proc.communicate()
+
+            return (out, err)
         
         else:
             return None

@@ -12,6 +12,9 @@ import base64
 from Crypto.PublicKey import RSA
 
 import os
+from sys import exit
+from signal import signal, SIGINT
+
 import time
 from random import randint
 
@@ -103,22 +106,31 @@ def gen_fingerprint(ssh_pubkey):
 
   return newhex
 
+def print_error(message):
+  print('Error: {}'.format(message))
+
 ## Main ##
 
 def main():
   global droplet
+  global token
+  global fingerprint
 
-  secrets = json.load(open('auth/secrets.json', 'r'))
-  token = secrets['user_token']
+  try:
+    secrets = json.load(open('auth/secrets.json', 'r'))
+    token = secrets['user_token']
+  except IOError:
+    print_error('secrets.json not found')
+    return 1
+  
   keyfile = 'auth/burnerkey'
-
   gen_ssh_keys(keyfile)
 
   privkey = open(keyfile).read()
   ssh_pubkey = open('{0}.pub'.format(keyfile), 'r').read()
   fingerprint = gen_fingerprint(ssh_pubkey)
 
-  droplet = Droplet(token, str(uuid.uuid1()), 'nyc3', keyfile, fingerprint)
+  droplet = Droplet(token, 'burner-' + str( uuid.uuid1() ), 'nyc3', keyfile, fingerprint)
 
   print("> Adding SSH key...")
   add_ssh_key(token, droplet.name, ssh_pubkey)
@@ -129,13 +141,16 @@ def main():
   server_online = False
   print("> Waiting for server to come online...")
   while not server_online:
-    if(droplet.run('echo Connection Established') == 0):
+    print(droplet.run('echo Connection Established')[1])
+    if(droplet.run('echo Connection Established')[1] == 0):
       server_online = True
+    else:
+      time.sleep(3)
 
   print("> Starting Instance...")
   init_wg(droplet)
   
-  input("Press any key to nuke instance. (DISABLE VPN ON CLINET BEFORE NUKING)")
+  input("> Press any key to nuke instance. (DISABLE VPN ON CLINET BEFORE NUKING)")
   
   print("> Removing Droplet...")
   droplet.destroy()
@@ -143,10 +158,24 @@ def main():
   print("> Removing SSH key...")
   del_ssh_key(token, fingerprint)
 
+def sigint_handler(signal_received, frame):
+  print('> SIGINT caught. Cleaning up...')
+  cleanup()
+  exit(0)
+
+def cleanup():
+  try:
+    droplet.destroy()
+    del_ssh_key(token, fingerprint)
+    print('> SSH Keys removed')
+  except:
+    print_error('Could not destroy droplets. Were they created?')
+
 if __name__ == '__main__':
   try:
+    signal(SIGINT, sigint_handler)
     main()
   except Exception as e:
-    print('Error: {0}'.format(e))
-    print('Error: Exception caught. Cleaning up...')
-    droplet.destroy()
+    print_error(e)
+    print_error('Exception caught. Cleaning up...')
+    cleanup()
