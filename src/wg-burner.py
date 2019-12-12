@@ -130,7 +130,9 @@ def main():
   ssh_pubkey = open('{0}.pub'.format(keyfile), 'r').read()
   fingerprint = gen_fingerprint(ssh_pubkey)
 
-  droplet = Droplet(token, 'burner-' + str( uuid.uuid1() ), 'nyc3', keyfile, fingerprint)
+  name = 'burner-' + str( uuid.uuid1() )
+
+  droplet = Droplet(token, name, 'nyc3', keyfile, fingerprint)
 
   print("> Adding SSH key...")
   add_ssh_key(token, droplet.name, ssh_pubkey)

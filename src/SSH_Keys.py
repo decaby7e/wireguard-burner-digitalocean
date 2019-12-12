@@ -2,7 +2,9 @@
 
 import hashlib
 import base64
+
 from Crypto.PublicKey import RSA
+
 import os
 
 class SSH_Keys:
@@ -32,12 +34,12 @@ class SSH_Keys:
         self.generate_public_key()
         self.write_privkey_file()
         self.write_pubkey_file()
-        self.get_pubkey_fingerprint( self.pubkey )
+        self.get_pubkey_fingerprint()
 
-    def get_pubkey_fingerprint(self, pubkey):
+    def get_pubkey_fingerprint(self):
         if self.fingerprint == None:
-            pubkey_string = str( pubkey.exportKey('OpenSSH'), 'utf-8' ).split()[1]
-            rawhex = hashlib.md5( base64.b64decode(pubkey_string) ).hexdigest()
+            pubkey_string = base64.b64decode(str( self.pubkey.exportKey('OpenSSH'), 'utf-8' ).split()[1])
+            rawhex = hashlib.md5( pubkey_string ).hexdigest()
             newhex = ''
             count = 0
 
@@ -57,9 +59,5 @@ class SSH_Keys:
         else:
             return self.fingerprint
 
-        
-        
-
-if __name__ == '__main__':
-    ssh_key = SSH_Key('test_key')
-    ssh_key.init()
+    def get_pubkey_ssh(self):
+        return str( self.pubkey.exportKey('OpenSSH'), 'utf-8' )

@@ -19,8 +19,8 @@ class Droplet:
         self.ssh_key_fingerprint = ssh_key_fingerprint
         
         self.headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer {0}'.format(self.token)
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer {0}'.format(self.token)
         }
 
     #Creates a new Droplet with the given information
@@ -93,11 +93,7 @@ class Droplet:
             ssh_prefix='ssh -o StrictHostKeyChecking=no -i {0} root@{1}'.format(self.privkey, self.ip)
             cmd='{0} \' {1} \''.format(ssh_prefix, command_string)
             
-            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
-            
-            (out, err) = proc.communicate()
-
-            return (out, err)
+            return os.system(cmd)
         
         else:
             return None
