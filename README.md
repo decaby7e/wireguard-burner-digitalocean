@@ -16,6 +16,7 @@ To run this script, please follow these steps:
 
   1. To create a Digital Ocean API key, [please see this tutorial](https://www.digitalocean.com/docs/api/create-personal-access-token/).
 
+
 3. Run the script! `./run.sh`
 
 ## Future improvements
