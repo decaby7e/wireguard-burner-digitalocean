@@ -91,8 +91,7 @@ class Droplet:
         if self.status == 'created':
             ssh_prefix='ssh -o StrictHostKeyChecking=no -i {0} root@{1}'.format(self.privkey, self.ip)
             cmd='{0} \' {1} \''.format(ssh_prefix, command_string)
-            return os.system(cmd)
+            return os.popen(cmd)
         
         else:
             return None
-        

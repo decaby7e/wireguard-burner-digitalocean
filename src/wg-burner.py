@@ -62,8 +62,11 @@ def init_wg(droplet):
   # cmd = 'python -m SimpleHTTPServer {0}'.format(listen_port)
   # droplet.run(cmd)
 
-  droplet.run('qrencode -t ansiutf8 < configs/client-2/wg2.conf')
-  input('> Press enter when done.')
+  # NOT FLEXIBLE: Only shows QR code! Maybe use as an option...
+  # droplet.run('qrencode -t ansiutf8 < configs/client-2/wg2.conf')
+  # input('> Press enter when done.')
+
+  droplet.run('cat configs/client-2/wg2.conf')
 
   droplet.run('sysctl -w net.ipv4.ip_forward=1')
 
