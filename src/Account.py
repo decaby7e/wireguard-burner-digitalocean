@@ -25,7 +25,7 @@ class Account:
 
         requests.post(curr_url, data=data, headers=self.headers)
 
-    def del_ssh_key(self, token, fingerprint):
+    def del_ssh_key(self, fingerprint):
         global api_url_base
 
         curr_url = '{0}account/keys/{1}'.format(Account.api_url_base, fingerprint)
