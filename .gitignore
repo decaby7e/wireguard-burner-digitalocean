@@ -8,5 +8,5 @@ burnerkey.pub
 *.pub
 
 #Temporary files / testing files
-tester.py
+test-*.py
 __pycache__/
