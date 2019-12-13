@@ -48,8 +48,6 @@ def main():
     account.del_ssh_key(keys.get_pubkey_fingerprint())
 
 def cleanup():
-    droplet.run('echo Hello world!')
-
     droplet.destroy()
 
     account.del_ssh_key(keys.get_pubkey_fingerprint())
