@@ -5,20 +5,13 @@ from SSH_Keys import SSH_Keys
 from Account import Account
 
 import json
-import requests
-
 import uuid
-
-import hashlib
-import base64
-from Crypto.PublicKey import RSA
 
 import os
 from sys import exit
 from signal import signal, SIGINT
 
 import time
-from random import randint
 
 api_url_base = 'https://api.digitalocean.com/v2/'
 droplet = None
@@ -31,8 +24,9 @@ def init_wg(droplet):
   droplet.run('git clone https://github.com/decaby7e/wireguard-management')
 
   droplet.run('wireguard-management/generate-wg-configs.sh -i {0}; cp configs/server/wg0.conf /etc/wireguard/'.format(droplet.ip))
-
+  
   # INSECURE: Exposes client and server private keys
+  # from random import randint
   # print("DEBUG: Serving up client configs...") #DEBUG
   # listen_port = randint(20000, 50000)
   # print('Visit {0}:{1} for configuration files.'.format(droplet.ip, listen_port))
@@ -108,6 +102,7 @@ def cleanup():
   try:
     droplet.destroy()
     account.del_ssh_key(fingerprint)
+    keys.cleanup()
     print('> SSH Keys removed')
   except Exception as e:
     print_error(e)
