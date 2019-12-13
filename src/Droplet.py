@@ -97,3 +97,9 @@ class Droplet:
         
         else:
             return None
+    
+    def is_online(self):
+        if(self.run('echo Connection Established') == 0):
+            return True
+        else:
+            return False
