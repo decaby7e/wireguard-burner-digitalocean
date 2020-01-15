@@ -1,3 +1,2 @@
 tqdm
-crypto
 pycryptodome==3.4.3
