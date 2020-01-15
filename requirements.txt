@@ -1,2 +1,2 @@
 tqdm
-pycryptodome==3.4.3
+pycryptodome>=3.6.6
