@@ -24,7 +24,7 @@ def init_wg(droplet):
   droplet.run('git clone https://github.com/decaby7e/wireguard-management')
 
   droplet.run('wireguard-management/generate-wg-configs.sh -i {0}; cp configs/server/wg0.conf /etc/wireguard/'.format(droplet.ip))
-  
+
   # INSECURE: Exposes client and server private keys
   # from random import randint
   # print("DEBUG: Serving up client configs...") #DEBUG
