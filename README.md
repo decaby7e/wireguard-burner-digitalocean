@@ -1,4 +1,5 @@
 # Wireguard Burner Script(s)
+
 Create a Wireguard VPN for one-time use and destroy it once finished.
 
 ## Structure
@@ -19,12 +20,14 @@ To run this script, please follow these steps:
 
 3. Run the script! `./run.sh`
 
-## Future improvements
+## To Do
 
-- Add parameters to wg-burner.py to specify number of clients, time to keep server up, etc.
+- [ ] Add parameters to wg-burner.py to specify number of clients, time to keep server up, etc.
 
-- In the future, it is possible that I will move the Droplet object to its own repository with some additonal content.
+- [ ] In the future, it is possible that I will move the Droplet object to its own repository with some additonal content.
 
-- Find a better way to wait for the droplet to come online. (Current implementation just bombards the server with SSH requests until it accepts one...)
+- [ ] Find a better way to wait for the droplet to come online. (Current implementation just bombards the server with SSH requests until it accepts one...)
 
-- Add support for other cloud providers
+- [ ] Add support for other cloud providers
+
+- [ ] Proper client interface (for Windows, Mac, Linux, Android, and iOS)
